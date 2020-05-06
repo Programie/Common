@@ -11,6 +11,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <bukkit-api-version>1.14.4</bukkit-api-version>
   </properties>
 
   <repositories>
@@ -30,6 +31,14 @@
       <url>https://gitlab.com/api/v4/projects/18622581/packages/maven</url>
     </snapshotRepository>
   </distributionManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.bukkit</groupId>
+      <artifactId>bukkit</artifactId>
+      <version>${bukkit-api-version}-R0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <resources>
