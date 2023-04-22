@@ -5,7 +5,7 @@ services:
 
 before_script:
   - echo -n $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
-  - echo -n $DOCKER_HUB_TOKEN | docker login -u programie --password-stdin
+  - if [[ $DOCKER_HUB_REPO ]]; then echo -n $DOCKER_HUB_TOKEN | docker login -u programie --password-stdin; fi
 
 Build-Main:
   stage: build
@@ -21,9 +21,13 @@ Build-Main:
       --build-arg VCS_URL=$CI_PROJECT_URL
       --cache-from $CI_REGISTRY_IMAGE:latest
       --tag $CI_REGISTRY_IMAGE:latest
-      --tag programie/$DOCKER_HUB_REPO:latest
       --push
       .
+    - >
+      if [[ $DOCKER_HUB_REPO ]]; then
+        docker tag $CI_REGISTRY_IMAGE:latest programie/$DOCKER_HUB_REPO:latest
+        docker push programie/$DOCKER_HUB_REPO:latest
+      fi
 
 Build-Release:
   stage: build
@@ -37,6 +41,10 @@ Build-Release:
       --build-arg VCS_URL=$CI_PROJECT_URL
       --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
       --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
-      --tag programie/$DOCKER_HUB_REPO:$CI_COMMIT_REF_NAME
       --push
       .
+    - >
+      if [[ $DOCKER_HUB_REPO ]]; then
+        docker tag $CI_REGISTRY_IMAGE:latest programie/$DOCKER_HUB_REPO:$CI_COMMIT_REF_NAME
+        docker push programie/$DOCKER_HUB_REPO:$CI_COMMIT_REF_NAME
+      fi
