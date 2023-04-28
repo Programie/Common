@@ -13,7 +13,7 @@ Build-Main:
     - main
     - master
   script:
-    - if [[ -z $BUILD_SKIP_DOCKER_PULL ]]; then docker pull $CI_REGISTRY_IMAGE:latest || true; fi
+    - if [[ $CI_PIPELINE_SOURCE != "schedule" ]]; then docker pull $CI_REGISTRY_IMAGE:latest || true; fi
     - >
       docker build
       --pull
