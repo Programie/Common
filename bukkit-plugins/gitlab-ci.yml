@@ -48,7 +48,7 @@ snapshot-release:
 deploy-release-modrinth:
   stage: deploy
   dependencies:
-    - package
+    - release
   rules:
     - if: $CI_COMMIT_TAG && $MODRINTH_PROJECT_ID != ""
   script:
