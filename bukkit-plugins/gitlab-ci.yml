@@ -7,6 +7,12 @@ cache:
   paths:
     - .m2/
 
+stages:
+  - build
+  - test
+  - package
+  - deploy
+
 build:
   stage: build
   script: mvn compile
@@ -18,7 +24,7 @@ test:
     - build
 
 release:
-  stage: deploy
+  stage: package
   script: mvn package
   dependencies:
     - test
@@ -29,7 +35,7 @@ release:
     - tags
 
 snapshot-release:
-  stage: deploy
+  stage: package
   script: mvn package
   dependencies:
     - test
@@ -38,3 +44,32 @@ snapshot-release:
       - target/*.jar
   only:
     - master
+
+deploy-release-modrinth:
+  stage: deploy
+  dependencies:
+    - package
+  only:
+    - tags
+  rules:
+    - if: $CI_COMMIT_TAG && $MODRINTH_PROJECT_ID != ""
+  script:
+    - |-
+      PAYLOAD=$(cat << JSON
+        {
+          "name": "${CI_COMMIT_TAG}",
+          "version_number": "${CI_COMMIT_TAG}",
+          "dependencies": [],
+          "game_versions": [],
+          "version_type": "release",
+          "loaders": ["bukkit", "paper", "spigot"],
+          "featured": true,
+          "status": "draft",
+          "requested_status": "draft",
+          "project_id": "${MODRINTH_PROJECT_ID}",
+          "file_parts": ["file"],
+          "primary_file": "file"
+        }
+      JSON
+      )
+    - curl https://api.modrinth.com/v2/version -X POST -F "data=${PAYLOAD}" -F "file=@target/*.jar"
