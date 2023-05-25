@@ -45,30 +45,11 @@ snapshot-release:
   only:
     - master
 
-deploy-release-modrinth:
+deploy-release:
   stage: deploy
+  image: registry.gitlab.com/programie/common/bukkit-plugin-deploy-helper
   dependencies:
     - release
   rules:
-    - if: $CI_COMMIT_TAG && $MODRINTH_PROJECT_ID != ""
-  script:
-    - |
-      FILE=$(find target/*.jar | head -n 1)
-      PAYLOAD=$(cat << JSON
-        {
-          "name": "${CI_COMMIT_TAG}",
-          "version_number": "${CI_COMMIT_TAG}",
-          "dependencies": [],
-          "game_versions": ["1.19"],
-          "version_type": "release",
-          "loaders": ["bukkit", "paper", "spigot"],
-          "featured": true,
-          "status": "draft",
-          "requested_status": "draft",
-          "project_id": "${MODRINTH_PROJECT_ID}",
-          "file_parts": ["file"],
-          "primary_file": "file"
-        }
-      JSON
-      )
-    - curl https://api.modrinth.com/v2/version -H "Authorization: ${MODRINTH_AUTH}" -X POST -F "data=${PAYLOAD}" -F "file=@${FILE}" -A "GitLab CI Job ${CI_PROJECT_URL} (git@selfcoders.com)"
+    - if: $CI_COMMIT_TAG
+  script: /deploy.py
