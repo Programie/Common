@@ -85,6 +85,8 @@ class Uploader:
         section_lines = []
         is_in_version_section = False
 
+        logging.info(f"Reading changelog from {filepath}")
+
         with filepath.open("r") as file:
             for line in file:
                 line = line.strip()
@@ -93,7 +95,7 @@ class Uploader:
                     is_in_version_section = False
                     header_line = line.strip("#").strip()
 
-                    match = re.match(r"^([0-9.]+) \((\d{4}-\d{2}\d{2})\)$", header_line)
+                    match = re.match(r"^([0-9.]+) \((\d{4}-\d{2}-\d{2})\)$", header_line)
                     if not match:
                         continue
 
@@ -106,7 +108,7 @@ class Uploader:
         if not section_lines:
             logging.warning(f"Version {version} not found in changelog or changelog entry is empty!")
 
-        return "\n".join(section_lines)
+        return "\n".join(section_lines).strip()
 
     def save_changelog(self):
         with self.root_path.joinpath("ci-release.md").open("w") as file:
@@ -143,7 +145,8 @@ class Uploader:
 if __name__ == "__main__":
     uploader = Uploader(Path(os.getenv("CI_PROJECT_DIR")), os.getenv("CI_COMMIT_TAG"))
 
+    uploader.save_changelog()
+
     modrinth_project_id = os.getenv("MODRINTH_PROJECT_ID")
     if modrinth_project_id:
-        uploader.save_changelog()
         uploader.upload_modrinth(modrinth_project_id, os.getenv("MODRINTH_AUTH"))
