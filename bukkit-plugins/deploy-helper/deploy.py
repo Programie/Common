@@ -103,6 +103,9 @@ class Uploader:
                 elif is_in_version_section:
                     section_lines.append(line)
 
+        if not section_lines:
+            logging.warning(f"Version {version} not found in changelog or changelog entry is empty!")
+
         return "\n".join(section_lines)
 
     def save_changelog(self):
