@@ -125,7 +125,7 @@ class Uploader:
         supported_game_version_ids = []
 
         for game_version in game_versions:
-            if game_version.get("name") in self.supported_game_versions:
+            if game_version.get("gameVersionTypeID") == 1 and game_version.get("name") in self.supported_game_versions:
                 supported_game_version_ids.append(game_version.get("id"))
 
         logging.info(f"Converted supported game versions to CurseForge IDs: {', '.join(supported_game_version_ids)}")
