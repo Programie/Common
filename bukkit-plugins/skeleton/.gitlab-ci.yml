@@ -3,4 +3,5 @@ include:
     file: "bukkit-plugins/gitlab-ci.yml"
 
 variables:
+  CURSEFORGE_PROJECT_ID: PROJECT_ID_FROM_CURSEFORGE_PROJECT_PAGE
   MODRINTH_PROJECT_ID: MOD_ID_FROM_MODRINTH_MOD_PAGE
