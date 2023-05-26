@@ -29,6 +29,7 @@ release:
   dependencies:
     - test
   artifacts:
+    expire_in: never
     paths:
       - target/*.jar
   only:
