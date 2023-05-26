@@ -135,7 +135,7 @@ class Uploader:
             "Authorization": auth
         }
 
-        logging.info(f"Uploading artifact {self.upload_file.relative_to(self.root_path)} (version {self.version}) to Modrinth")
+        logging.info(f"Uploading artifact {self.upload_file.relative_to(self.root_path)} (version {self.version}) to Modrinth (Project ID {project_id})")
 
         with self.upload_file.open("rb") as file:
             response = requests.post("https://api.modrinth.com/v2/version", files={"file": file}, data={"data": json.dumps(data)}, headers=headers)
