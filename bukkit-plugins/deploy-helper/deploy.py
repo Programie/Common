@@ -65,6 +65,12 @@ class Uploader:
 
         logging.info(f"Plugin supports Minecraft {self.supported_game_versions[0]} - {self.supported_game_versions[-1]}")
 
+        changelog_file = self.root_path.joinpath("CHANGELOG.md")
+        if changelog_file.exists():
+            self.changelog = self.get_changelog_entries_for_version(changelog_file, self.version)
+        else:
+            self.changelog = ""
+
     @staticmethod
     def get_base_version(version):
         match = re.match(r"^([0-9]+.[0-9]+).?([0-9]+)?", version)
@@ -74,17 +80,43 @@ class Uploader:
 
         return match.group(1)
 
+    @staticmethod
+    def get_changelog_entries_for_version(filepath: Path, version: str):
+        section_lines = []
+        is_in_version_section = False
+
+        with filepath.open("r") as file:
+            for line in file:
+                line = line.strip()
+
+                if line.startswith("## "):
+                    is_in_version_section = False
+                    header_line = line.strip("#").strip()
+
+                    match = re.match(r"^([0-9.]+) \((\d{4}-\d{2}\d{2})\)$", header_line)
+                    if not match:
+                        continue
+
+                    if match.group(1) == version:
+                        logging.info(f"Found version {version} in changelog")
+                        is_in_version_section = True
+                elif is_in_version_section:
+                    section_lines.append(line)
+
+        return "\n".join(section_lines)
+
     def upload_modrinth(self, project_id: str, auth: str):
         data = {
             "name": self.version,
             "version_number": self.version,
+            "changelog": self.changelog,
             "dependencies": [],
             "game_versions": self.supported_game_versions,
             "version_type": "release",
             "loaders": ["bukkit", "paper", "spigot"],
             "featured": True,
-            "status": "draft",
-            "requested_status": "draft",
+            "status": "listed",
+            "requested_status": "listed",
             "project_id": project_id,
             "file_parts": ["file"],
             "primary_file": "file"
