@@ -143,6 +143,8 @@ class Uploader:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+
     uploader = Uploader(Path(os.getenv("CI_PROJECT_DIR")), os.getenv("CI_COMMIT_TAG"))
 
     uploader.save_changelog()
