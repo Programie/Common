@@ -114,6 +114,35 @@ class Uploader:
         with self.root_path.joinpath("ci-release.md").open("w") as file:
             file.write(self.changelog)
 
+    def upload_curseforge(self, project_id: str, auth_token: str):
+        headers = {
+            "X-Api-Token": auth_token
+        }
+
+        logging.info("Getting game version IDs from CurseForge API")
+
+        game_versions = requests.get("https://minecraft.curseforge.com/api/game/versions", headers=headers).json()
+        supported_game_version_ids = []
+
+        for game_version in game_versions:
+            if game_version.get("name") in self.supported_game_versions:
+                supported_game_version_ids.append(game_version.get("id"))
+
+        logging.info(f"Converted supported game versions to CurseForge IDs: {', '.join(supported_game_version_ids)}")
+
+        data = {
+            "changelog": self.changelog,
+            "changelogType": "markdown",
+            "gameVersions": supported_game_version_ids,
+            "releaseType": "release"
+        }
+
+        logging.info(f"Uploading artifact {self.upload_file.relative_to(self.root_path)} (version {self.version}) to CurseForge (Project ID {project_id})")
+
+        with self.upload_file.open("rb") as file:
+            response = requests.post(f"https://minecraft.curseforge.com/api/projects/{project_id}/upload-file", files={"file": file}, data={"metadata": json.dumps(data)}, headers=headers)
+            response.raise_for_status()
+
     def upload_modrinth(self, project_id: str, auth: str):
         data = {
             "name": self.version,
@@ -152,3 +181,7 @@ if __name__ == "__main__":
     modrinth_project_id = os.getenv("MODRINTH_PROJECT_ID")
     if modrinth_project_id:
         uploader.upload_modrinth(modrinth_project_id, os.getenv("MODRINTH_AUTH"))
+
+    curseforge_project_id = os.getenv("CURSEFORGE_PROJECT_ID")
+    if curseforge_project_id:
+        uploader.upload_curseforge(curseforge_project_id, os.getenv("CURSEFORGE_AUTH"))
