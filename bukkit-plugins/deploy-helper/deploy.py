@@ -105,6 +105,10 @@ class Uploader:
 
         return "\n".join(section_lines)
 
+    def save_changelog(self):
+        with self.root_path.joinpath("ci-release.md").open("w") as file:
+            file.write(self.changelog)
+
     def upload_modrinth(self, project_id: str, auth: str):
         data = {
             "name": self.version,
@@ -138,4 +142,5 @@ if __name__ == "__main__":
 
     modrinth_project_id = os.getenv("MODRINTH_PROJECT_ID")
     if modrinth_project_id:
+        uploader.save_changelog()
         uploader.upload_modrinth(modrinth_project_id, os.getenv("MODRINTH_AUTH"))
