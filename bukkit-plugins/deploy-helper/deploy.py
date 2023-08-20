@@ -141,6 +141,7 @@ class Uploader:
 
         with self.upload_file.open("rb") as file:
             response = requests.post(f"https://minecraft.curseforge.com/api/projects/{project_id}/upload-file", files={"file": file}, data={"metadata": json.dumps(data)}, headers=headers)
+            logging.info(f"Response from CurseForge API: {response.text}")
             response.raise_for_status()
 
     def upload_modrinth(self, project_id: str, auth: str):
@@ -168,6 +169,7 @@ class Uploader:
 
         with self.upload_file.open("rb") as file:
             response = requests.post("https://api.modrinth.com/v2/version", files={"file": file}, data={"data": json.dumps(data)}, headers=headers)
+            logging.info(f"Response from Modrinth API: {response.text}")
             response.raise_for_status()
 
 
