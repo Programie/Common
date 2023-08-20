@@ -45,11 +45,28 @@ AVAILABLE_GAME_VERSIONS = [
 ]
 
 
+class FileSize:
+    units = ["K", "M", "G", "T", "P"]
+
+    @staticmethod
+    def bytes_to_human_readable(size_bytes: int):
+        unit = ""
+
+        for unit in [""] + FileSize.units:
+            if abs(size_bytes) < 1024:
+                return f"{size_bytes:3.1f}{unit}B"
+            size_bytes /= 1024
+
+        return f"{size_bytes:3.1f}{unit}B"
+
+
 class Uploader:
     def __init__(self, root_path: Path, version: str):
         self.root_path = root_path
         self.upload_file = list(self.root_path.joinpath("target").glob("*.jar"))[0]
         self.version = version
+
+        logging.info(f"File to upload: {self.upload_file} ({FileSize.bytes_to_human_readable(self.upload_file.stat().st_size)})")
 
         pom_xml = ElementTree.parse(self.root_path.joinpath("pom.xml")).getroot()
 
