@@ -152,6 +152,7 @@ class Uploader:
         data = {
             "changelog": self.changelog,
             "changelogType": "markdown",
+            "displayName": f"{self.upload_file.stem}-{self.version}.jar",
             "gameVersions": supported_game_version_ids,
             "releaseType": "release"
         }
