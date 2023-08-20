@@ -52,7 +52,7 @@ class Uploader:
         pom_xml = ElementTree.parse(self.root_path.joinpath("pom.xml")).getroot()
 
         bukkit_api_version_element = pom_xml.find("./{http://maven.apache.org/POM/4.0.0}properties/{http://maven.apache.org/POM/4.0.0}bukkit-api-version")
-        if bukkit_api_version_element:
+        if bukkit_api_version_element is not None:
             minimum_game_version = bukkit_api_version_element.text.strip()
         else:
             minimum_game_version = "1.14.4"
