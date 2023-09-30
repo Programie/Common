@@ -7,7 +7,7 @@
   <packaging>pom</packaging>
 
   <name>bukkit-plugin-parent</name>
-  <url>https://gitlab.com/Programie/Common</url>
+  <url>https://github.com/Programie/Common</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,11 +24,11 @@
   <distributionManagement>
     <repository>
       <id>common-repo</id>
-      <url>https://gitlab.com/api/v4/projects/18622581/packages/maven</url>
+      <url>https://maven.pkg.github.com/Programie/Common</url>
     </repository>
     <snapshotRepository>
       <id>common-repo</id>
-      <url>https://gitlab.com/api/v4/projects/18622581/packages/maven</url>
+      <url>https://maven.pkg.github.com/Programie/Common</url>
     </snapshotRepository>
   </distributionManagement>
 
