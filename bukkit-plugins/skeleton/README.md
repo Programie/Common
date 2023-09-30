@@ -1,9 +1,10 @@
 # PROJECT_NAME
 
-[![pipeline status](https://gitlab.com/Programie/DoorCloser/badges/master/pipeline.svg)](https://gitlab.com/Programie/PROJECTNAME/commits/master)
-[![download from GitLab](https://img.shields.io/badge/download-Releases-blue?logo=gitlab)](https://gitlab.com/Programie/PROJECTNAME/-/releases)
+[![actions status](https://github.com/Programie/PROJECTNAME/actions/workflows/build.yml/badge.svg)](https://github.com/Programie/PROJECTNAME/actions/workflows/build.yml)
+[![download from GitHub](https://img.shields.io/badge/download-Releases-blue?logo=github)](https://github.com/Programie/PROJECTNAME/releases/latest)
 [![download from Modrinth](https://img.shields.io/badge/download-Modrinth-blue?logo=modrinth)](https://modrinth.com/plugin/PROJECTNAME_LOWERCASE)
 [![download from CurseForge](https://img.shields.io/badge/download-CurseForge-blue?logo=curseforge)](https://www.curseforge.com/minecraft/bukkit-plugins/PROJECTNAME_LOWERCASE)
+[![view on Website](https://img.shields.io/badge/view-Website-blue)](https://selfcoders.com/projects/PROJECTNAME_LOWERCASE)
 
 ## Build
 

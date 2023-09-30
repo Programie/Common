@@ -1,6 +1,6 @@
 # Changelog
 
-# VERSION (YYYY-MM-DD)
+# [X.Y.Z] - YYYY-MM-DD
 
 * Added something
 * Another change
